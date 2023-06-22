@@ -49,6 +49,19 @@
                         </div>
                     </div>
                     <br>
+                    <div class="row">
+                        <div class="col">
+                            <label for="status">Status</label>
+                            <select name="status" class="form-control">
+                                @foreach($statusType  as $key => $item)
+                                    <option value="{{$key}}">
+                                        {{$item}}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <br>
                     <div class="d-grid gap-2 col-2 mx-auto">
                         <button type="submit" class="btn btn-primary">Update Follower</button>
                     </div>

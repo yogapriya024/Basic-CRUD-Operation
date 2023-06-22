@@ -17,6 +17,7 @@ return new class extends Migration
             $table->mediumText('description');
             $table->foreignId('user_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->tinyInteger('status')->default(0)->nullable();
+            $table->tinyInteger('created_by');
             $table->timestamps();
         });
     }

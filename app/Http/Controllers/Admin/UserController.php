@@ -13,69 +13,44 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 
-class clientController extends Controller
+class UserController extends Controller
 {
     public function index()
     {
-        $event = Event::all();
+        $userId = Auth::user()->id;
+        $taskCompleted = Event::where('user_id', $userId)->where('status', 1)->count();
+        $taskInCompleted = Event::where('user_id', $userId)->where('status', 0)->count();
+        $taskInProgress = Event::where('user_id', $userId)->where('status', 2)->count();
+        $taskInitiated = Event::where('user_id', $userId)->where('status', 3)->count();
+        return view('admin.user.dashboard', compact('taskInProgress', 'taskInitiated', 'taskCompleted', 'taskInCompleted'));
+    }
+
+    public function getTask($id)
+    {
+        $viewTask = Event::with('manager')->where('user_id', $id)->get();
         $statuses = Event::STATUS;
-        return view('admin.manager.index', compact('event', 'statuses'));
+        return view('admin.user.index', compact('viewTask', 'statuses'));
     }
 
-    public function create()
-    {
-        $user = User::where('role_as', 3)->get();
-        $statusType = Event::STATUS;
-        return view('admin.manager.create', compact('user', 'statusType'));
-    }
-
-    public function store(EventRequest $request)
-    {
-        $event = new Event();
-        $event->task_name = $request->task_name;
-        $event->description = $request->description;
-        $event->user_id = $request->user_id;
-        $event->status =$request->status;
-        $event->created_by = Auth::user()->id;
-        $event->save();
-        return redirect('manager/task')->with('message', 'Task Added Successfully');
-    }
-
-    public function edit($id)
+    public function editTask($id)
     {
         $event = Event::find($id);
         $statusType = Event::STATUS;
-        $user = User::where('role_as', 3)->get();
-        return view('admin.manager.edit', compact('event', 'user', 'statusType'));
+        return view('admin.user.editUserTask', compact('event', 'statusType'));
     }
 
-    public function update(EventRequest $request, $id)
+    public function updateTask(Request $request, $id)
     {
         $event = Event::find($id);
-        $event->task_name = $request->task_name;
-        $event->description = $request->description;
-        $event->user_id = $request->user_id;
         $event->status =$request->status;
-        $event->created_by = Auth::user()->id;
         $event->save();
-        return redirect('manager/task')->with('message', 'Task Updated Successfully');
-    }
-
-    public function destroy($id)
-    {
-        $event = Event::find($id);
-        if ($event) {
-            $event->delete();
-            return redirect('manager/task')->with('message', 'Task Deleted Successfully');
-        } else {
-            return redirect('manager/task')->with('message', 'No Task Id Found');
-        }
+        return redirect('user/edit-Usertask/'.$id)->with('message', 'Task status Updated Successfully');
     }
 
     public function editProfile ($id)
     {
         $editProfile = User::find($id);
-        return view('admin.manager.editProfile', compact('editProfile'));
+        return view('admin.user.editProfile', compact('editProfile'));
     }
 
     public function updateProfile (FollowerRequest $request, $id)
@@ -106,6 +81,18 @@ class clientController extends Controller
             'user_id' => $user->id,
             'image' =>  ($request->image) ? $filename : $getContactInfo->image,
         ]);
-        return redirect('manager/edit-manager/'. $id)->with('message', 'Profile Updated Successfully');
+        return redirect('user/edit-endUser/'.$id)->with('message', 'Profile Updated Successfully');
+    }
+
+    public function indexTaskCompleted($id)
+    {
+        $taskCompleted = Event::where('user_id', $id)->where('status', 1)->count();
+        return view('admin.manager.dashboard', compact('taskCompleted'));
+    }
+
+    public function indexTaskInCompleted($id)
+    {
+        $taskInCompleted = Event::where('user_id', $id)->where('status', 0)->count();
+        return view('admin.manager.dashboard', compact('taskInCompleted'));
     }
 }

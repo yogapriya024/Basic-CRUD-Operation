@@ -1,9 +1,9 @@
-@extends('layouts.manager')
+@extends('layouts.user')
 @section('title','Profile')
 @section('content')
     <div class="container-fluid px-4">
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Profile</li>
+            <li class="breadcrumb-item active">User Profile</li>
         </ol>
         <div class="row">
 
@@ -23,15 +23,15 @@
                         @endforeach
                     </div>
                 @endif
-                <form action="{{url('manager/update-manager/'.$editProfile->id)}}" method="POST" enctype="multipart/form-data">
+                <form action="{{url('user/update-endUser/'.$editProfile->id)}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
                     <div class="row">
                         @if($editProfile->contactInfo->image)
-                        <div class="col">
-                            <img src="{{asset('uploads/follower/'.$editProfile->contactInfo->image)}}" width="100px" height="100px" alt="img">
-                        </div>
+                            <div class="col">
+                                <img src="{{asset('uploads/follower/'.$editProfile->contactInfo->image)}}" width="100px" height="100px" alt="img">
+                            </div>
                         @endif
                         <div class="col">
                             <label for="image">Upload Profile</label>

@@ -16,6 +16,7 @@
                         <th>Task Name</th>
                         <th>Description</th>
                         <th>Assign To</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -29,6 +30,7 @@
                                 <td>
                                         {{$item->user->name}}
                                    </td>
+                                <td>{{$statuses[$item->status]}}</td>
                                 <td>
                                     <a href="{{url('manager/edit-task/'.$item->id)}}" class="btn btn-success">Edit</a>
 

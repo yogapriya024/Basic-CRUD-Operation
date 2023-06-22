@@ -13,11 +13,24 @@ class Event extends Model
         'task_name',
         'description',
         'user_id',
-        'status'
+        'status',
+        'created_by'
+    ];
+
+    const STATUS = [
+        0 => 'In-Complete',
+        1 => 'Complete',
+        2 => 'In-Progress',
+        3 => 'Initiated'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function manager()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\FollowerController;
 use App\Http\Controllers\Admin\VisitorController;
 use App\Http\Controllers\Admin\ManagerController;
 use App\Http\Controllers\Admin\clientController;
+use App\Http\Controllers\Admin\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,6 +30,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
    Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index']);
+
    Route::get('user', [App\Http\Controllers\Admin\FollowerController::class, 'index']);
    Route::get('add-user', [App\Http\Controllers\Admin\FollowerController::class, 'create']);
    Route::post('add-user', [App\Http\Controllers\Admin\FollowerController::class, 'store']);
@@ -60,6 +63,12 @@ Route::prefix('manager')->middleware(['auth', 'isAdmin'])->group(function () {
 Route::prefix('user')->middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Admin\UserController::class, 'index']);
 
+    Route::get('task/{id}', [App\Http\Controllers\Admin\UserController::class, 'getTask']);
+    Route::get('edit-Usertask/{id}', [App\Http\Controllers\Admin\UserController::class, 'editTask']);
+    Route::put('update-Usertask/{id}', [App\Http\Controllers\Admin\UserController::class, 'updateTask']);
+
     Route::get('edit-endUser/{id}', [App\Http\Controllers\Admin\UserController::class, 'editProfile']);
     Route::put('update-endUser/{id}', [App\Http\Controllers\Admin\UserController::class, 'updateProfile']);
 });
+
+

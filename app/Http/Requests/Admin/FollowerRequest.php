@@ -35,7 +35,6 @@ class FollowerRequest extends FormRequest
             'state'=> ['required', 'string'],
             'country'=> ['required', 'string'],
             'zipcode'=>['required','numeric','digits_between:5,8'],
-            'image' => ['required','max:2048']
         ];
         return $common;
     }
@@ -67,8 +66,6 @@ class FollowerRequest extends FormRequest
             'country.string'=>'Enter the correct city',
             'mobile.required'=>'Mobile is required',
             'mobile.integer'=>'Mobile must be a number',
-            'image.required' => 'Team Logo is required',
-            'image.max' => 'The file size should be 2MB'
         ];
     }
 }
